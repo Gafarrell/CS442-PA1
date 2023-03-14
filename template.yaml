@@ -7,7 +7,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: java8
-      Handler: io.github.gafarrell.App::handleRequest
+      Handler: io.github.gafarrell.instanceA.App::handleRequest
       Timeout: 60
       MemorySize: 512
       CodeUri: ./target/AwsTest.jar
