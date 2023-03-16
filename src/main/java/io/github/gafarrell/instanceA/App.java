@@ -24,14 +24,19 @@ public class App{
     private final RekognitionDriver rekognitionDriver = new RekognitionDriver();
 
     public void RunApp() {
+        System.out.println("Grabbing image file names from bucker cs442-unr");
         List<S3Object> objects = s3Driver.listObjects("cs442-unr");
         for (S3Object object : objects){
+            System.out.println("Processing: " + object.key());
             List<Label> labels = rekognitionDriver.detectLabelsWithinImage("cs442-unr", object.key());
             for (Label l : labels){
-                if (l.name().equalsIgnoreCase("car") && l.confidence() > 90F)
+                if (l.name().equalsIgnoreCase("car") && l.confidence() > 90F) {
                     sqsDriver.sendBasicMessage(object.key());
+                    System.out.println("Rekognition detected car with confidence > 90% in image: " + object.key());
+                }
             }
         }
+        System.out.println("Done processing, sending -1 index.");
         sqsDriver.sendBasicMessage("-1");
     }
 }

@@ -1,1 +1,6 @@
-io\github\gafarrell\App.class
+io\github\gafarrell\instanceB\App.class
+io\github\gafarrell\shared\SqsDriver.class
+io\github\gafarrell\instanceA\App.class
+io\github\gafarrell\shared\DependencyHandler.class
+io\github\gafarrell\shared\S3Driver.class
+io\github\gafarrell\shared\RekognitionDriver.class

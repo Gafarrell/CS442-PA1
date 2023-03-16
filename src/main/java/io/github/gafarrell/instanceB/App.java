@@ -30,16 +30,24 @@ public class App {
         int pollCount = 0;
         while (!message.equals("-1")) {
             pollCount++;
+            System.out.println("Polling sqs for image indices...");
             ReceiveMessageResponse pollResponse = sqsDriver.pollMessages("ImageQueue");
             if (pollResponse.hasMessages()){
+                System.out.println("Received messages!");
                 for (Message msg : pollResponse.messages()){
                     message = msg.body();
-                    if (message.equals("-1")) break;
+                    if (message.equals("-1")){
+                        System.out.println("Recieved -1, terminating program.");
+                        break;
+                    }
+                    System.out.println("Processing image: " + message);
                     analyzeAndSaveImageText(message);
                 }
                 pollCount = 0;
             }
         }
+
+        System.out.println("Saving text detection results to file.");
         saveResults();
     }
 
