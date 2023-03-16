@@ -1,15 +1,21 @@
 package io.github.gafarrell.shared;
 
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
-import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.List;
 
 public class SqsDriver {
     private final SqsClient sqsClient = DependencyHandler.SqsClient();
+
+    public SqsDriver(){
+        try{
+            getQueueUrl("ImageQueue");
+        } catch (QueueDoesNotExistException e){
+            CreateQueueRequest createQueueRequest = CreateQueueRequest.builder().queueName("ImageQueue").build();
+            sqsClient.createQueue(createQueueRequest);
+        }
+    }
 
     public void sendBasicMessage(String message){
         SendMessageRequest messageRequest = SendMessageRequest.builder().messageBody(message).queueUrl(getQueueUrl("ImageQueue")).build();

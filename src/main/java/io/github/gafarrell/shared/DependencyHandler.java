@@ -15,6 +15,7 @@ public class DependencyHandler {
     private static S3Client s3Client;
 
     public static SqsClient SqsClient(){
+
         return sqsClient == null ?
                 sqsClient = SqsClient.builder()
                         .credentialsProvider(ProfileCredentialsProvider.create())
