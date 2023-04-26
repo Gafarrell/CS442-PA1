@@ -31,7 +31,7 @@ public class App {
         while (!message.equals("-1")) {
             pollCount++;
             System.out.println("Polling sqs for image indices...");
-            ReceiveMessageResponse pollResponse = sqsDriver.pollMessages("ImageQueue");
+            ReceiveMessageResponse pollResponse = sqsDriver.pollMessages("LambdaQueue");
             if (pollResponse.hasMessages()){
                 System.out.println("Received messages!");
                 for (Message msg : pollResponse.messages()){

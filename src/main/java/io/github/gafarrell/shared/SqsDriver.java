@@ -6,15 +6,38 @@ import software.amazon.awssdk.services.sqs.model.*;
 import java.util.List;
 
 public class SqsDriver {
-    private final SqsClient sqsClient = DependencyHandler.SqsClient();
+    private final SqsClient sqsClient;
 
     public SqsDriver(){
+        sqsClient = DependencyHandler.SqsClient();
         try{
             getQueueUrl("ImageQueue");
         } catch (QueueDoesNotExistException e){
             CreateQueueRequest createQueueRequest = CreateQueueRequest.builder().queueName("ImageQueue").build();
             sqsClient.createQueue(createQueueRequest);
         }
+    }
+
+    public SqsDriver(boolean lambda){
+        sqsClient = DependencyHandler.SqsClient(lambda);
+        try{
+            getQueueUrl("LambdaQueue");
+        } catch (QueueDoesNotExistException e){
+            CreateQueueRequest createQueueRequest = CreateQueueRequest.builder().queueName("ImageQueue").build();
+            sqsClient.createQueue(createQueueRequest);
+        }
+    }
+
+    public void sendLambdaMessage(String message) {
+        try{
+            getQueueUrl("LambdaQueue");
+        } catch (QueueDoesNotExistException e){
+            CreateQueueRequest createQueueRequest = CreateQueueRequest.builder().queueName("LambdaQueue").build();
+            sqsClient.createQueue(createQueueRequest);
+        }
+
+        SendMessageRequest messageRequest = SendMessageRequest.builder().messageBody(message).queueUrl(getQueueUrl("LambdaQueue")).build();
+        sqsClient.sendMessage(messageRequest);
     }
 
     public void sendBasicMessage(String message){

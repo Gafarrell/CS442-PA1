@@ -19,7 +19,18 @@ public class DependencyHandler {
         return sqsClient == null ?
                 sqsClient = SqsClient.builder()
                         .credentialsProvider(ProfileCredentialsProvider.create())
-                        .region(Region.US_WEST_1)
+                        .region(region)
+                        .httpClient(UrlConnectionHttpClient.builder().build())
+                        .build()
+                :
+                sqsClient;
+    }
+
+    public static SqsClient SqsClient(boolean lambda){
+
+        return sqsClient == null ?
+                sqsClient = SqsClient.builder()
+                        .region(region)
                         .httpClient(UrlConnectionHttpClient.builder().build())
                         .build()
                 :
@@ -37,9 +48,29 @@ public class DependencyHandler {
                 rekognitionClient;
     }
 
+    public static RekognitionClient RekognitionClient(boolean lambda){
+        return rekognitionClient == null ?
+                rekognitionClient = RekognitionClient.builder()
+                        .region(region)
+                        .httpClientBuilder(UrlConnectionHttpClient.builder())
+                        .build()
+                :
+                rekognitionClient;
+    }
+
     public static S3Client S3Client(){
         return s3Client == null ?
                 s3Client = S3Client.builder().credentialsProvider(ProfileCredentialsProvider.create())
+                        .httpClientBuilder(UrlConnectionHttpClient.builder())
+                        .region(region)
+                        .build()
+                :
+                s3Client;
+    }
+
+    public static S3Client S3Client(boolean lambda){
+        return s3Client == null ?
+                s3Client = S3Client.builder()
                         .httpClientBuilder(UrlConnectionHttpClient.builder())
                         .region(region)
                         .build()

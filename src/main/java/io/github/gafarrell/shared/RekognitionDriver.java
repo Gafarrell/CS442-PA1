@@ -7,7 +7,15 @@ import software.amazon.awssdk.services.rekognition.model.S3Object;
 import java.util.List;
 
 public class RekognitionDriver {
-    private final RekognitionClient rekognitionClient = DependencyHandler.RekognitionClient();
+    private final RekognitionClient rekognitionClient;
+
+    public RekognitionDriver(){
+        rekognitionClient = DependencyHandler.RekognitionClient();
+    }
+
+    public RekognitionDriver(boolean lambda){
+        rekognitionClient = DependencyHandler.RekognitionClient(lambda);
+    }
 
 
     public List<Label> detectLabelsWithinImage(String bucket, String key){
